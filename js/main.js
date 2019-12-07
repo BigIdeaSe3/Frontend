@@ -3,14 +3,18 @@ var context = canvas.getContext("2d")
 context.strokeStyle = "#FF0000"
 
 function setColor(params) {
+    sendColor(params)
+
     context.strokeStyle = params
 }
 
 function clearCanvas() {
+    clearBoard();
     context.clearRect(0, 0, canvas.width, canvas.height)
 }
 
 function changeThickness(params) {
+    setThickness(params)
     context.lineWidth = params
 }
 
@@ -21,14 +25,14 @@ $(function() {
         var x = e.pageX
         var y = e.pageY
 
-        sendStart(x,y)
+        startDrawing(x,y)
 
         mouseclicked = true
     })
 
     $("#drawCanvas").mouseup(function(e) {
         mouseclicked = false
-        sendStop()
+        stopDrawing()
     })
 
     $("#drawCanvas").mousemove(function(e) {
@@ -36,7 +40,7 @@ $(function() {
             var x = e.pageX
             var y = e.pageY
 
-            sendLocation(x,y)
+            draw(x,y)
         }
     })
 })
