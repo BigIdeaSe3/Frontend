@@ -8,8 +8,8 @@ function connect() {
     stompClient.connect({}, function(frame) {
         stompClient.subscribe('/topic/lobbies', function(message) {
             var msg = JSON.parse(message.body)
-            gameId = msg.message;
             if(msg.type == "CREATE") {
+            gameId = msg.message;
                 stompClient.subscribe('/topic/game/'+gameId, function(message) {
                     var msg = JSON.parse(message.body)
                     if(msg.type == "STARTDRAWING") {
@@ -26,6 +26,14 @@ function connect() {
                         context.clearRect(0, 0, canvas.width, canvas.height)
                     } else if(msg.type == "SETTHICKNESS") {
                         context.lineWidth = msg.message;
+                    } else if(msg.type == "SETSUBJECT") {
+                        document.getElementById("guessSubmit").disabled = false;
+                    } else if(msg.type == "GUESS") {
+                        if(msg.message == true) {
+                            alert("You guessed correctly good job!")
+                        } else if (msg.message == false) {
+                            alert("You guessed incorrect, try again!")
+                        }
                     }
                 })
             }
@@ -41,11 +49,6 @@ function connect() {
     })
 }
 
-function subscribeToGame(id) {
-    game = stompClient.subscribe('/topic/game/'+id, function(msg) {
-        var message = JSON.parse(msg.content);
-    })
-}
 
 function unsubscribeToGame(id) {
     game.unsubscribe()
@@ -74,4 +77,12 @@ function clearBoard() {
 
 function setThickness(thickness) {
     stompClient.send("/app/game/"+gameId,{}, JSON.stringify({'type':"SETTHICKNESS", 'message':thickness}))    
+}
+
+function setSubject(subject) {
+    stompClient.send("/app/game/"+gameId,{}, JSON.stringify({'type':"SETSUBJECT",'message':subject}))
+}
+
+function sendGuess(subject) {
+    stompClient.send("/app/game/"+gameId,{}, JSON.stringify({'type':"GUESS",'message':subject}))
 }
