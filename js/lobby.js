@@ -21,6 +21,11 @@ function connect() {
 function addLobbiesToTable(lobbies) {
     var table = document.getElementById('lobbies');
 
+    $("#lobbies").find("tr:not(:first)").remove();
+
+    
+
+
     for (let i = lobbies.length; i > 0; i--) {
         const element = lobbies[i];
         
