@@ -13,11 +13,18 @@ function listenToServer(gameId) {
     var socket = new SockJS('http://localhost:9000/DrawSomething')
     stompClient = Stomp.over(socket)
     stompClient.connect({}, function(frame) {
-        stompClient.subscribe("/topic/game/"+gameId, function(message) {
+        var gameConn = stompClient.subscribe("/topic/game/"+gameId, function(message) {
             var msg = JSON.parse(message.body)
             console.log(msg)
             if (msg.type == "JOIN" || msg.type == "GETALLPLAYERS") {
                 addUsersToTable(msg.message)
+            } else if (msg.type == "STARTGAME") {
+                gameConn.unsubscribe()
+                if (msg.message.username == name) {
+                    location.href = "kiesWoord.html?id="+gameId;
+                } else {
+                    location.href = "rader.html?id="+gameId;
+                }
             }
         })
         getAllUsers();
@@ -34,10 +41,10 @@ function addUsersToTable(users) {
 
     $("#users").find("tr:not(:first)").remove();
 
-    for (let i = users.length-1; i >= 0; i--) {
+    for (let i = 0; i < users.length; i++) {
         const element = users[i];
-
-        console.log(users[i])
+        
+        console.log(users)
         
         var row = table.insertRow(1);
         row.insertCell(0)
@@ -47,4 +54,6 @@ function addUsersToTable(users) {
     }
 }
 
-function startGame()
+function startGame() {
+    stompClient.send("/app/game/"+gameId,{}, JSON.stringify({'type':"STARTGAME","message":name}))
+}

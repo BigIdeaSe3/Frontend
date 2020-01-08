@@ -1,19 +1,13 @@
 <html>
-    <head>            
+    <head>
+
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script></head>
     </head>
-    <body onload="getLobbyId()">
-        <div >
-            <table id="users">
-                <th>
-                    <td>user</td>
-                </th>
-            </table><br>
-            <button onclick="startGame()">Start Game</button>
-        </div>
+    <body onload="connectToDrawer()">
+        <canvas id="drawCanvas" class="drawCanvas" width="1000" height="500" style="border:1px solid #c3c3c3;">Your browser does not support canvas elements</canvas><br>
 
-
-        <script src="js/lobby.js"></script>
+        
+        <script src="js/rader.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
     </body>
