@@ -26,10 +26,29 @@ function sendSubjectToServer(subject) {
                 context.stroke();
             } else if(msg.type == "STOPDRAWING") {
                 context.closePath();
+            } else if(msg.type == "CHANGECOLOR") {
+                context.strokeStyle = msg.message.kleur;
+            } else if(msg.type == "CLEAR") {
+                context.clearRect(0, 0, canvas.width, canvas.height)
+            } else if(msg.type == "SETTHICKNESS") {
+                context.lineWidth = msg.message.dikte;
             }
         })
-        stompClient.send("/app/game/"+gameId, {}, JSON.stringify({'type':"SETSUBJECT",'message':subject}));
+        stompClient.send("/app/game/"+gameId, {}, JSON.stringify({'type':"SETSUBJECT",'message':{'onderwerp':subject}}));
     })
+}
+
+function setColor(color) {
+    stompClient.send("/app/game/"+gameId,{},JSON.stringify({'type':'CHANGECOLOR','message':JSON.stringify({"kleur": color})}))
+}
+
+function clearCanvas() {
+    stompClient.send("/app/game/"+gameId,{}, JSON.stringify({'type':"CLEAR", 'message':''}))    
+}
+
+
+function changeThickness(thickness) {
+    stompClient.send("/app/game/"+gameId,{}, JSON.stringify({'type':"SETTHICKNESS", 'message':JSON.stringify({'dikte':thickness})}))    
 }
 
 $(function() {
