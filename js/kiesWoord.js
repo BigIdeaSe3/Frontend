@@ -12,8 +12,8 @@ function getWords(){
                 for (let i = 0; i < msg.message.length; i++) {
                     const element = msg.message[i];
                     var btn = document.createElement('button')
-                    btn.innerHTML = element;
-                    btn.onclick = (function(element) {return function() {choose(element);}})(element);
+                    btn.innerHTML = element.onderwerp;
+                    btn.onclick = (function(element) {return function() {choose(element.onderwerp);}})(element);
 
                     div.append(btn)
                 }
